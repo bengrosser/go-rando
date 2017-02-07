@@ -15,6 +15,10 @@ Go Rando is released as a Chrome extension and as a userscript for use with Tamp
 * go-rando.chromeextension/\* source for the Chrome extension
 * go-rando.userscript/\* source for the raw userscript 
 
+### Project Website
+
+[Go Rando](http://bengrosser.com/projects/go-rando/)
+
 ### Related Projects
 
 * [Facebook Demetricator](http://github.com/bengrosser/facebook-demetricator)
