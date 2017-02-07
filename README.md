@@ -8,7 +8,7 @@ Facebook’s “reactions” let you quickly express how you feel about a link, 
 
 ### Supported Browsers
 
-Textbook is released as a Chrome extension and as a userscript for use with Tampermonkey in Firefox, Safari, Edge, and Opera. 
+Go Rando is released as a Chrome extension and as a userscript for use with Tampermonkey in Firefox, Safari, Edge, and Opera. 
 
 ### Files
 
