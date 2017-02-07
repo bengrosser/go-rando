@@ -5,8 +5,8 @@
 // @namespace com.bengrosser.gorando
 // @description Obfuscates your feelings on Facebook.
 
-// @updateURL http://bengrosser.com/gr/go-rando.meta.js
-// @downloadURL https://bengrosser.com/gr/go-rando.user.js
+// @updateURL http://bengrosser.com/gr/share/go-rando.meta.js
+// @downloadURL https://bengrosser.com/share/gr/go-rando.user.js
 //
 // @match *://*.facebook.com/*
 // @include *://*.facebook.com/*
@@ -17,7 +17,7 @@
 // @exclude *://*.facebook.com/plugins/*
 // @exclude *://*.facebook.com/xti.php*
 //
-// @icon http://bengrosser.com/gr/go-rando-logo-256.png
+// @icon http://bengrosser.com/share/gr/go-rando-logo-256.png
 //
 // ==/UserScript==// -----------------------------------------
 
@@ -47,6 +47,9 @@
 // --Raphaël Duracell
 //
 // Thanks to Sebastian Frith for his Illustrator prowess!
+//
+// Big thanks to Kate McDowell, who suggested "Rando" as part 
+// of the title!
 //
 // And special thanks to Filippo Lorenzin, curator of the 
 // Blinding Pleasures exhibition for all his help and support 
