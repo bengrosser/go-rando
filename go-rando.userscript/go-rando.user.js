@@ -53,7 +53,7 @@
 //
 // And special thanks to Filippo Lorenzin, curator of the 
 // Blinding Pleasures exhibition, for all his help and support 
-// for this work.
+// for this work!
 //
 //
 //
