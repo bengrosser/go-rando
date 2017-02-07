@@ -1,6 +1,7 @@
 // ==UserScript==
 // @name Go Rando
-// @version 0.9.9
+// @version 1.0.0
+// @author Benjamin Grosser
 // @namespace com.bengrosser.gorando
 // @description Obfuscates your feelings on Facebook.
 
@@ -26,8 +27,10 @@
 // Ben Grosser
 //
 // Go Rando
+// 2017
 // web browser extension
-// Started March, 2016 -- Released February, 2017
+//
+// (Started March, 2016 -- Released February, 2017)
 //
 // Premiere Exhibition:
 // Blinding Pleasures
@@ -82,7 +85,7 @@
 var j;
 var IS_SAFARI_OR_FIREFOX_ADDON = false;
 var LIKE_BLOCK_PARENT = '._khz';
-var VERSION_NUMBER = '0.9.9';
+var VERSION_NUMBER = '1.0.0';
 var attaching = false;
 var LANG = "en";
 
