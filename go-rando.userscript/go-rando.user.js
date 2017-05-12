@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name Go Rando
-// @version 1.0.0
+// @version 1.0.1
 // @author Benjamin Grosser
 // @namespace com.bengrosser.gorando
 // @description Obfuscates your feelings on Facebook.
@@ -88,7 +88,7 @@
 var j;
 var IS_SAFARI_OR_FIREFOX_ADDON = true;
 var LIKE_BLOCK_PARENT = '._khz';
-var VERSION_NUMBER = '1.0.0';
+var VERSION_NUMBER = '1.0.1';
 var attaching = false;
 var LANG = "en";
 
