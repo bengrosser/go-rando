@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name Go Rando
-// @version 1.0.0
+// @version 1.0.2
 // @author Benjamin Grosser
 // @namespace com.bengrosser.gorando
 // @description Obfuscates your feelings on Facebook.
@@ -88,7 +88,7 @@
 var j;
 var IS_SAFARI_OR_FIREFOX_ADDON = false;
 var LIKE_BLOCK_PARENT = '._khz';
-var VERSION_NUMBER = '1.0.0';
+var VERSION_NUMBER = '1.0.2';
 var attaching = false;
 var LANG = "en";
 
@@ -106,6 +106,7 @@ var pickingTextES = "Selección...";
 var pickingTextPT = "Seleção...";
 var pickingTextIT = "Selezione...";
 
+var foundCount = 0;
 
 function main() {
     var startURL = window.location.href;
@@ -140,43 +141,14 @@ function main() {
     }
 
 	// monitor the DOM for insertions
-    var watchNode = document.querySelector('body, ._5pcb');
-
-    var observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if(mutation.type == "childList" && !attaching) {
-                attaching = true;
-
-                for(var i = 0; i < 2000; i+=250) {
-                    delayedSetup(i);
-                }
-            }
-        });
+    ready('.UFILikeLink', function(e) {
+        var n = jQuery(e);
+        n.addClass('reactionObfuscated');
+        attachReactionObfuscator(jQuery(e));
     });
 
-    observer.observe(watchNode, { childList: true } );
-
-	// run a few times for each insertion to catch 
-	// slower-loading nodes
-    function delayedSetup(t) {
-        setTimeout(function() {
-            setupReactionsBlock(j(LIKE_BLOCK_PARENT));
-            if(t == 1750) attaching = false;
-        }, t);
-    }
 }
  
-// find the correct Like buttons and attach an obfuscator
-function setupReactionsBlock(n) {
-    n.
-        not('.reactionObfuscated').
-        addClass('reactionObfuscated').
-        find('.UFILikeLink').
-        each(function() {
-            attachReactionObfuscator(j(this));
-        }
-    );
-}
 
 // binds a function to every Like button so that a click
 // triggers an obufscation rather than regular "Like"
@@ -227,10 +199,63 @@ function attachReactionObfuscator(n) {
 			}
 
             setThinking(j(this)).done(function() {
+                // set initial time
+                var time = 500;
+                // had n.parent().find
+                
+                // if we don't have 2r6l try to force it, otherwise, proceed
+                if(lp.find('._2r6l').length < 1) {
+
+                    
+                    // use the hidden accessibility element to force reactions to appear
+                    var trigger = lp.find('span[data-accessibilityid="virtual_cursor_trigger"]:first');
+
+                    if(trigger.length > 0) {
+                        trigger.click();
+
+                        // wait 250ms to see if we got 2r6l
+                        setTimeout(function() {
+                            // if we still don't have it, wait another 250ms
+                            if(lp.find('._2r6l').length < 1) {
+
+                                setTimeout(function() {
+                                    // if we still don't have it now (500ms), try 250ms more
+                                    // (wait is pushed to next block)
+                                    if(lp.find('._2r6l').length < 1) {
+                                        time = 250; // total time 750
+                                    }
+                                    else {
+                                        // we have it and spent 500ms getting it, so set remaining time to 0ms
+                                        time = 0; 
+                                    }
+                                }, 250);
+                            } 
+                            
+                            else {
+                                // we have it and spent 250ms getting it, so set remaining time to 250ms
+                                time = 250;
+                            }
+                        }, 250);
+
+                    } 
+                    // if no trigger and no 2r6l we're shit out of luck
+                    // can't produce reactions, proceed as if normal
+                    else {
+                        time = 500;
+                    }
+
+                    //time = 1000;
+                }
+
+                // REMOVE ELSE 
+                else {
+                    // 2r6l exists
+
+                }
+
             	setTimeout(function() {
                     var t = lp.find('._iuw[aria-label="'+r+'"]');
 
-                    //if(t != undefined) {
                     if(t.length) {
                     	if(r != likeText) t.click();
 						lp.find('.UFILikeLink').show();
@@ -240,16 +265,75 @@ function attachReactionObfuscator(n) {
 						lp.find('.UFILikeLink').show();
 						lp.find('.gr_picking').remove();
                     }
-                }, 500);
+                    //j('style[source="rando1"]').remove();
+                }, time);
             });
+        } // end if likeON
+        else {
+            // if like was on, see if we can trigger 
         }
     });
 }
 
 
+
 //
 // ALL UTILITY BELOW HERE
 //
+
+
+// ready from ryan morr 
+// http://ryanmorr.com/using-mutation-observers-to-watch-for-element-availability/
+
+(function(win) {
+    'use strict';
+    
+    var listeners = [], 
+    doc = win.document, 
+    MutationObserver = win.MutationObserver || win.WebKitMutationObserver,
+    observer;
+    
+    function ready(selector, fn) {
+        // Store the selector and callback to be monitored
+        listeners.push({
+            selector: selector,
+            fn: fn
+        });
+        if (!observer) {
+            // Watch for changes in the document
+            observer = new MutationObserver(check);
+            observer.observe(doc.documentElement, {
+                childList: true,
+                subtree: true
+            });
+        }
+        // Check if the element is currently in the DOM
+        check();
+    }
+        
+    function check() {
+        // Check the DOM for elements matching a stored selector
+        for (var i = 0, len = listeners.length, listener, elements; i < len; i++) {
+            listener = listeners[i];
+            // Query for elements matching the specified selector
+            elements = doc.querySelectorAll(listener.selector);
+            for (var j = 0, jLen = elements.length, element; j < jLen; j++) {
+                element = elements[j];
+                // Make sure the callback isn't invoked with the 
+                // same element more than once
+                if (!element.ready) {
+                    element.ready = true;
+                    // Invoke the callback with the element
+                    listener.fn.call(element, element);
+                }
+            }
+        }
+    }
+
+    // Expose `ready`
+    win.ready = ready;
+            
+})(this);
 
 // cleaner syntax than match()
 String.prototype.contains = function(it) { return this.indexOf(it) != -1; };
