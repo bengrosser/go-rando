@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name Go Rando
-// @version 1.0.2
+// @version 1.0.3
 // @author Benjamin Grosser
 // @namespace com.bengrosser.gorando
 // @description Obfuscates your feelings on Facebook.
@@ -88,7 +88,7 @@
 var j;
 var IS_SAFARI_OR_FIREFOX_ADDON = false;
 var LIKE_BLOCK_PARENT = '._khz';
-var VERSION_NUMBER = '1.0.2';
+var VERSION_NUMBER = '1.0.3';
 var attaching = false;
 var LANG = "en";
 
@@ -106,7 +106,15 @@ var pickingTextES = "Selección...";
 var pickingTextPT = "Seleção...";
 var pickingTextIT = "Selezione...";
 
+var hideReactionBarStyle = '<style class="gr_hideBar" type="text/css">._2r6l,._49ev-,._1oxj{opacity:0}</style>';
+
+
 var foundCount = 0;
+var preloadCount = 0;
+var PRELOAD_MAX = 10;
+var gotFirstClick = false;
+var atHome = false;
+var atTimeline = false;
 
 function main() {
     var startURL = window.location.href;
@@ -124,21 +132,28 @@ function main() {
     }
 
     // console reporting
-    console.log("Go Rando "+VERSION_NUMBER);
+    console.log("Go Rando (2017) -- ver. "+VERSION_NUMBER+" -- by Ben Grosser");
     console.log("    --> "+startURL);
 
     // setup jQuery on j to avoid any possible conflicts
     j = jQuery.noConflict();
 
     // determine language. 
-    LANG = j('html').attr('lang');
+    setTimeout(function() {
+        LANG = j('html').attr('lang');
 
-    if(!(LANG == "en" || LANG == "fr" || LANG == "de" ||
-         LANG == "es" || LANG == "pt" || LANG == "it")) {
-        console.log("Go Rando --> unsupported language detected ("+LANG+")"); 
-        console.log("Go Rando --> defaulting to English");
-        LANG = "en";
-    }
+        if(!(LANG == "en" || LANG == "fr" || LANG == "de" ||
+             LANG == "es" || LANG == "pt" || LANG == "it")) {
+            console.log("Go Rando --> unsupported language detected ("+LANG+")"); 
+            console.log("Go Rando --> defaulting to English");
+            LANG = "en";
+        } else {
+            console.log("Go Rando --> supported language "+LANG.toUpperCase()+" detected");
+        }
+    }, 500);
+
+    if(j('body').hasClass('home')) atHome = true;
+    if(j('body').hasClass('timelineLayout')) atTimeline = true;
 
 	// monitor the DOM for insertions
     ready('.UFILikeLink', function(e) {
@@ -146,6 +161,76 @@ function main() {
         n.addClass('reactionObfuscated');
         attachReactionObfuscator(jQuery(e));
     });
+
+    //console.log("trigger count 0: "+ j('span[data-accessibilityid="virtual_cursor_trigger"]').length);
+
+    // if it's a Timeline, preload a few chunks
+    ready('#pagelet_timeline_main_column', function(e) {
+        console.log("new timeline layout");
+
+        if(gotFirstClick && atHome) location = location; // force reload
+
+        preloadCount = 0;
+        
+        atTimeline = true;
+        atHome = false;
+
+        var getMoreTimeline = setInterval(function() {
+            var pager = document.querySelector('.uiMorePagerPrimary')
+            if(pager != undefined) pager.click();
+            preloadCount++;
+            if(preloadCount >= PRELOAD_MAX || gotFirstClick) {
+                clearInterval(getMoreTimeline);
+            }
+        }, 300);
+    });
+
+
+    // if it's a news feed, preload a bunch of chunks
+    ready('._5usd', function(e) {
+
+        if(gotFirstClick && atTimeline) location = location; // force reload
+
+        preloadCount = 0;
+
+        atTimeline = false;
+        atHome = true;
+
+        var n = jQuery(e);
+
+        var getMore = function(n) {
+            //console.log("\n\nclicking for MORE");
+            n.find('span').click();
+            if(!gotFirstClick && preloadCount < PRELOAD_MAX) {
+                var timeoutCount = (preloadCount*100);
+                //console.log("timeoutCount = "+timeoutCount);
+                setTimeout(getMore, timeoutCount, n);
+                preloadCount++;
+                //console.log("preloadCount = "+preloadCount);
+            } else if(!gotFirstClick && preloadCount < PRELOAD_MAX + 5) {
+                // no first click but passed preload_max
+                var timeoutCount = (preloadCount*1.3*100);
+                //console.log("timeoutCount = "+timeoutCount);
+                setTimeout(getMore, timeoutCount, n);
+                preloadCount++;
+            }
+
+            /*
+            console.log("trigger count 1: "+ j('span[data-accessibilityid="virtual_cursor_trigger"]').length);
+            console.log("khz count: "+j('._khz').length);
+            */
+        };
+
+        if(!gotFirstClick) {
+            //console.log('found a ._5usd');
+            setTimeout(getMore, 200, n);
+            preloadCount++;
+            //console.log("preloadCount = "+preloadCount);
+        } else {
+            //console.log("!gotFirstClick1");
+        }
+    });
+
 
 }
  
@@ -180,6 +265,10 @@ function attachReactionObfuscator(n) {
     likeText = reactionLabels[0];
 
     n.click(function(e) { 
+        // hide the popup so it doesn't flash
+        j('head').append(hideReactionBarStyle);
+
+        var gotFirstClick = true;
 
         var likeON = false;
         if(n.hasClass('UFILinkBright')) likeON = true; 
@@ -266,11 +355,12 @@ function attachReactionObfuscator(n) {
 						lp.find('.gr_picking').remove();
                     }
                     //j('style[source="rando1"]').remove();
+                    j('.gr_hideBar').remove();
                 }, time);
             });
         } // end if likeON
         else {
-            // if like was on, see if we can trigger 
+            j('.gr_hideBar').remove();
         }
     });
 }
