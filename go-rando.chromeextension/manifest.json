@@ -1,6 +1,6 @@
 {
     "name": "Go Rando",
-    "version": "1.0.3",
+    "version": "1.0.5",
     "description": "Obfuscates your feelings on Facebook.",
     "homepage_url": "http://bengrosser.com/projects/go-rando/",
     "manifest_version": 2,
@@ -20,6 +20,7 @@
                                     "*://*.facebook.com/dialog/*", 
                                     "*://*.facebook.com/xti.php*", 
                                     "*://*.facebook.com/plugins/*", 
+                                    "*://*.facebook.com/common/*", 
                                     "*://*.facebook.com/connect/*" 
                                 ],
             "exclude_matches":  [   "*://*.facebook.com/ai.php*",
@@ -27,6 +28,7 @@
                                     "*://*.facebook.com/dialog/*", 
                                     "*://*.facebook.com/xti.php*", 
                                     "*://*.facebook.com/plugins/*", 
+                                    "*://*.facebook.com/common/*", 
                                     "*://*.facebook.com/connect/*" 
                                 ],
             "js": ["go-rando.user.js"]

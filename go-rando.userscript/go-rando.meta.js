@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name Go Rando 
-// @version 1.0.3
+// @version 1.0.5
 // @author Benjamin Grosser
 // @namespace com.bengrosser.textbook
 // @description Obfuscates your feelings on Facebook.
@@ -14,6 +14,7 @@
 // @exclude *://*.facebook.com/dialog/*
 // @exclude *://*.facebook.com/connect/*
 // @exclude *://*.facebook.com/plugins/*
+// @exclude *://*.facebook.com/common/*
 // @exclude *://*.facebook.com/xti.php*
 // 
 // @icon http://bengrosser.com/share/gr/go-rando-logo-256.png

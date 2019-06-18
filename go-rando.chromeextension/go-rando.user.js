@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name Go Rando
-// @version 1.0.3
+// @version 1.0.5
 // @author Benjamin Grosser
 // @namespace com.bengrosser.gorando
 // @description Obfuscates your feelings on Facebook.
@@ -88,7 +88,7 @@
 var j;
 var IS_SAFARI_OR_FIREFOX_ADDON = false;
 var LIKE_BLOCK_PARENT = '._khz';
-var VERSION_NUMBER = '1.0.3';
+var VERSION_NUMBER = '1.0.5';
 var attaching = false;
 var LANG = "en";
 
@@ -156,7 +156,8 @@ function main() {
     if(j('body').hasClass('timelineLayout')) atTimeline = true;
 
 	// monitor the DOM for insertions
-    ready('.UFILikeLink', function(e) {
+    //ready('.UFILikeLink', function(e) {
+    ready('[data-testid="UFI2ReactionLink"]', function(e) {
         var n = jQuery(e);
         n.addClass('reactionObfuscated');
         attachReactionObfuscator(jQuery(e));
@@ -265,13 +266,15 @@ function attachReactionObfuscator(n) {
     likeText = reactionLabels[0];
 
     n.click(function(e) { 
+        //console.log("in click");
         // hide the popup so it doesn't flash
         j('head').append(hideReactionBarStyle);
 
         var gotFirstClick = true;
 
         var likeON = false;
-        if(n.hasClass('UFILinkBright')) likeON = true; 
+        //if(n.hasClass('UFILinkBright')) likeON = true; 
+        if(n.attr('aria-pressed') == 'true') likeON = true; 
 
         if(!likeON) {
 
@@ -344,14 +347,16 @@ function attachReactionObfuscator(n) {
 
             	setTimeout(function() {
                     var t = lp.find('._iuw[aria-label="'+r+'"]');
+                    //console.log(t);
 
                     if(t.length) {
                     	if(r != likeText) t.click();
-						lp.find('.UFILikeLink').show();
+						lp.find('[data-testid="UFI2ReactionLink"]').show();
 						lp.find('.gr_picking').remove();
                     } 
                     else {
-						lp.find('.UFILikeLink').show();
+						//lp.find('.UFILikeLink').show();
+						lp.find('[data-testid="UFI2ReactionLink"]').show();
 						lp.find('.gr_picking').remove();
                     }
                     //j('style[source="rando1"]').remove();
