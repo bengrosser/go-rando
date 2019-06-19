@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name Go Rando
-// @version 1.0.5
+// @version 1.0.6
 // @author Benjamin Grosser
 // @namespace com.bengrosser.gorando
 // @description Obfuscates your feelings on Facebook.
@@ -15,7 +15,6 @@
 // @exclude *://*.facebook.com/dialog/*
 // @exclude *://*.facebook.com/connect/*
 // @exclude *://*.facebook.com/plugins/*
-// @exclude *://*.facebook.com/common/*
 // @exclude *://*.facebook.com/xti.php*
 //
 // @icon http://bengrosser.com/share/gr/go-rando-logo-256.png
@@ -89,7 +88,7 @@
 var j;
 var IS_SAFARI_OR_FIREFOX_ADDON = true;
 var LIKE_BLOCK_PARENT = '._khz';
-var VERSION_NUMBER = '1.0.5';
+var VERSION_NUMBER = '1.0.6';
 var attaching = false;
 var LANG = "en";
 
@@ -301,47 +300,37 @@ function attachReactionObfuscator(n) {
                 if(lp.find('._2r6l').length < 1) {
 
                     
-                    // use the hidden accessibility element to force reactions to appear
+                    /*
                     var trigger = lp.find('span[data-accessibilityid="virtual_cursor_trigger"]:first');
 
                     if(trigger.length > 0) {
                         trigger.click();
 
-                        // wait 250ms to see if we got 2r6l
                         setTimeout(function() {
-                            // if we still don't have it, wait another 250ms
                             if(lp.find('._2r6l').length < 1) {
 
                                 setTimeout(function() {
-                                    // if we still don't have it now (500ms), try 250ms more
-                                    // (wait is pushed to next block)
                                     if(lp.find('._2r6l').length < 1) {
                                         time = 250; // total time 750
                                     }
                                     else {
-                                        // we have it and spent 500ms getting it, so set remaining time to 0ms
                                         time = 0; 
                                     }
                                 }, 250);
                             } 
                             
                             else {
-                                // we have it and spent 250ms getting it, so set remaining time to 250ms
                                 time = 250;
                             }
                         }, 250);
 
                     } 
-                    // if no trigger and no 2r6l we're shit out of luck
-                    // can't produce reactions, proceed as if normal
                     else {
                         time = 500;
                     }
-
-                    //time = 1000;
+                    */
                 }
 
-                // REMOVE ELSE 
                 else {
                     // 2r6l exists
 

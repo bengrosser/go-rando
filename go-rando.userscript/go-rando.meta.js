@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name Go Rando 
-// @version 1.0.5
+// @version 1.0.6
 // @author Benjamin Grosser
 // @namespace com.bengrosser.textbook
 // @description Obfuscates your feelings on Facebook.
