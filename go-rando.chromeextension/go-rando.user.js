@@ -127,6 +127,7 @@ function main() {
            startURL.contains("/dialog/") ||
            startURL.contains("/connect/") ||
            startURL.contains("/plugins/") ||
+           startURL.contains("/common/") ||
            startURL.contains("/xti.php")
            ) return; 
     }
