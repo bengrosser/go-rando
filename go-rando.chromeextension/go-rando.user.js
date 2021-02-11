@@ -190,14 +190,13 @@ function attachReactionObfuscator(e) {
     // bind to click so we can swap out our needs with FB's
     $(e).click(function(event) {
 
-
         // ignore clicks on buttons that don't have associated 
-		// Reactions (e.g. Like buttons on Pages/Groups). that
-		// way everything with those buttons will proceed as 
-		// normal. detect by looking for the accessibility button 
-		// for triggering the pop-up reaction dialog
+        // Reactions (e.g. Like buttons on Pages/Groups). that
+        // way everything with those buttons will proceed as 
+        // normal. detect by looking for the accessibility button 
+        // for triggering the pop-up reaction dialog
         if(!$(this).parent().
-			find('div[aria-label="'+lang["react"]+'"]').length) {
+            find('div[aria-label="'+lang["react"]+'"]').length) {
             return;
         }
 
@@ -210,8 +209,8 @@ function attachReactionObfuscator(e) {
         $('div[role="article"]').parent().addClass('no-accent');
 
         // as long as this isn't a 'remove reaction' button
-		// then proceed (if it is, just let the click go through
-		// as normal to turn the already activated reaction off
+        // then proceed (if it is, just let the click go through
+        // as normal to turn the already activated reaction off
         if(!$(this).attr("aria-label").contains(lang["remove"])) {
 
             // temporarily stop event bubbling so it doesn't 
@@ -247,18 +246,19 @@ function attachReactionObfuscator(e) {
             }
 
             // hide the reaction accessibility button temporarily 
-			// so it doesn't become visible in next step (will unhide
-			// the button as soon as we're done with it so it doesn't break)
+            // so it doesn't become visible in next step (will unhide
+            // the button as soon as we're done with it so it doesn't break)
             $(this).parent().find('div[aria-label="'+lang["react"]+'"]').hide();
 
             // trigger the reaction accessibility button (e.g. the
             // one used by keyboard navigators). this will force FB to 
             // create the Reactions dialog we need, as otherwise it's not 
-			// already on the page / in the DOM
+            // already on the page / in the DOM
             $(this).parent().
-				find('div[aria-label="'+lang["react"]+'"]')[0].dispatchEvent(kbENTER);
+                find('div[aria-label="'+lang["react"]+'"]')[0].
+                dispatchEvent(kbENTER);
 
-			// take a brief pause and then GO RANDO
+            // take a brief pause and then GO RANDO
             setTimeout(function() { ;goRando(e) }, 250);
         }
     });
@@ -304,7 +304,7 @@ function goRando(e) {
     let oldReactionStyle = false;
 
     // more reliable to navigate with TABs on the parent element
-	let oldReactionsParent = undefined;
+    let oldReactionsParent = undefined;
 
     // two different hierarchies to test for to detect old reaction code
     // if we find it, reset the reactionButtons accordingly. 
@@ -329,39 +329,39 @@ function goRando(e) {
         // old reaction style for primary like buttons
         if($(e).find('div span i').length > 0) {
 
-			// clear them out
-			reactionSelectors = [];
+            // clear them out
+            reactionSelectors = [];
 
-			// run through the slugs and store new selectors
-			for(let i = 0; i < reactionSlugs.length; i++) {
-				reactionSelectors.push(
-        			'body > div.uiLayer div[aria-label="'+
-						lang["reactions"]+'"] [aria-label="'+lang[reactionSlugs[i]]+'"]',
-				);
-			}	
+            // run through the slugs and store new selectors
+            for(let i = 0; i < reactionSlugs.length; i++) {
+                reactionSelectors.push(
+                    'body > div.uiLayer div[aria-label="'+
+                    lang["reactions"]+'"] [aria-label="'+lang[reactionSlugs[i]]+'"]',
+                );
+            }	
 
-			// less buggy to TAB on the parent element, so store it now
-			oldReactionsParent = document.querySelector(
-				'body > div.uiLayer div[aria-label="'+ lang["reactions"]+'"]'
-			); 
+            // less buggy to TAB on the parent element, so store it now
+            oldReactionsParent = document.querySelector(
+                'body > div.uiLayer div[aria-label="'+ lang["reactions"]+'"]'
+            ); 
         }
         
         // if it's not an old primary like button it must be a comment like button
         else {
-			reactionSelectors = [];
+            reactionSelectors = [];
 
-			for(let i = 0; i < reactionSlugs.length; i++) {
-				reactionSelectors.push(
-        			'div[aria-label="'+
-					lang["reactions"]+'"] div[role="toolbar"] > [aria-label="'+
-					lang[reactionSlugs[i]]+'"]',
-				);
-			}	
+            for(let i = 0; i < reactionSlugs.length; i++) {
+                reactionSelectors.push(
+                    'div[aria-label="'+
+                    lang["reactions"]+'"] div[role="toolbar"] > [aria-label="'+
+                    lang[reactionSlugs[i]]+'"]',
+                );
+            }	
 
-			// less buggy to TAB on the parent element, so store it now
-			oldReactionsParent = document.querySelector( 
-				'div[aria-label="'+lang["reactions"]+'"] div[role="toolbar"]' 
-			);
+            // less buggy to TAB on the parent element, so store it now
+            oldReactionsParent = document.querySelector( 
+                'div[aria-label="'+lang["reactions"]+'"] div[role="toolbar"]' 
+            );
         }
 
         // reset reactionButtons with the updated selectors
@@ -371,20 +371,20 @@ function goRando(e) {
             }
         }
 
-		// sometimes FB's dynamic insertion of these reactions into the DOM is 
-		// laggy. delaying our access a bit helps, as does other strategies
-		// in the for() below
-		setTimeout(function() { 
-			getOldReactionButtons(); 
+        // sometimes FB's dynamic insertion of these reactions into the DOM is 
+        // laggy. delaying our access a bit helps, as does other strategies
+        // in the for() below
+        setTimeout(function() { 
+            getOldReactionButtons(); 
 
-			// try again if needed, though am no longer seeing need for this
-			if(!reactionButtons.length > 0) {
-				setTimeout(function() { 
+            // try again if needed, though am no longer seeing need for this
+	        if(!reactionButtons.length > 0) {
+	            setTimeout(function() { 
                     getOldReactionButtons(); 
                 }, 250);
 
-			}
-		}, 50);
+            }
+        }, 100);
     }
 
 	
@@ -440,14 +440,14 @@ function goRando(e) {
                 // depending on async timing, it may or may not have its 
                 // aria-label changed, so try both
                 let t = $(e).parent().
-					find('div[aria-label="'+lang["change_"+finalReactionLabel]+'"]');
+                    find('div[aria-label="'+lang["change_"+finalReactionLabel]+'"]');
 
-				// if that didn't find it, try this
+                // if that didn't find it, try this
                 if(!t.length) {
                     t = $(e).parent().find('div[aria-label="'+lang["react"]+'"]');
                 }
 
-				// if we found it, show it
+                // if we found it, show it
                 if(t.length) t.show();
 
                 // now I need to *unfocus* the like button so the outline and/or 
@@ -463,8 +463,8 @@ function goRando(e) {
                 tmpInput.focus({preventScroll: true });
                 e.parentElement.removeChild(tmpInput);
 
-				// now that it no longer has keyboard focus, turn outline-width 
-				// back on for the like button
+                // now that it no longer has keyboard focus, turn outline-width 
+                // back on for the like button
                 $(e).css('outline-width','1px');
 
                 // resetting keyboard-focus outline on outer feed item elements
@@ -477,20 +477,20 @@ function goRando(e) {
         else {
             setTimeout(function() {
 
-				// get the next button
+                // get the next button
                 let nextButton = reactionButtons[i%reactionButtons.length];
 
                 // if this is is old style code, use tab on the parent to advance
                 if (oldReactionStyle) {
 
-					// waiting for nextButton to be valid lets us know 
-					// when the menu is fully loaded
-					// could trigger before then but it gets dicey
-					if(nextButton != undefined)
-						oldReactionsParent.dispatchEvent(kbTAB);
-				}	
+                    // waiting for nextButton to be valid lets us know 
+                    // when the menu is fully loaded
+                    // could trigger before then but it gets dicey
+                    if(nextButton != undefined)
+                        oldReactionsParent.dispatchEvent(kbTAB);
+                }	
 
-				// otherwise, with new code, use the right arrow to advance
+                // otherwise, with new code, use the right arrow to advance
                 else nextButton.dispatchEvent(kbRA);
 
             }, timeDelay * i);
