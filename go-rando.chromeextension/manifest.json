@@ -1,19 +1,21 @@
 {
     "name": "Go Rando",
-    "version": "1.0.6",
-    "description": "Obfuscates your feelings on Facebook.",
-    "homepage_url": "http://bengrosser.com/projects/go-rando/",
+    "version": "2.0.0",
+    "description": "Obfuscates how you feel on Facebook.",
+    "homepage_url": "https://bengrosser.com/projects/go-rando/",
     "manifest_version": 2,
-    "icons": {  "16": "go-rando-logo-16.png",
-                "32": "go-rando-logo-32.png",
-                "48": "go-rando-logo-48.png",
-                "64": "go-rando-logo-64.png",
-                "128": "go-rando-logo-128.png",
-                "256": "go-rando-logo-256.png",
-                "512": "go-rando-logo-512.png" },
+    "icons": {  
+        "16": "go-rando-logo-16.png",
+        "32": "go-rando-logo-32.png",
+        "48": "go-rando-logo-48.png",
+        "64": "go-rando-logo-64.png",
+        "128": "go-rando-logo-128.png",
+        "256": "go-rando-logo-256.png",
+        "512": "go-rando-logo-512.png" 
+    },
     "content_scripts": [
         {
-            "matches": [ "*://*.facebook.com/*" ],
+            "matches": [ "https://*.facebook.com/*" ],
             "all_frames": true,
             "exclude_globs":    [   "*://*.facebook.com/ai.php*",
                                     "*://*.facebook.com/ajax/*",
@@ -31,7 +33,8 @@
                                     "*://*.facebook.com/common/*", 
                                     "*://*.facebook.com/connect/*" 
                                 ],
-            "js": ["go-rando.user.js"]
+		    "run_at": "document_start",
+            "js": ["jquery.min.js","ready.js","go-rando.user.js"]
         }
     ]
 }
