@@ -92,8 +92,6 @@
 /* global $, ready */
 
 // TODO:
-// remove all_frames from manifest? - test
-// need wildcard in match on manifest (for https)?
 // still need to tweak initial wait after first load?
 
 (function() {
@@ -141,8 +139,13 @@ if(langLabel != undefined) {
             " detected. "+lang["like"]+"!"
         );
     }
+    else {
+        console.log("-- unsupported language detected ("+langLabel.toUpperCase()+")"); 
+        console.log("-- defaulting to EN (English)");
+        lang = en;
+    }
 } else {
-    console.log("-- unsupported language detected ("+langLabel.toUpperCase()+")"); 
+    console.log("-- could not detect language configuration"); 
     console.log("-- defaulting to EN (English)");
     lang = en;
 }
@@ -238,8 +241,8 @@ function attachReactionObfuscator(e) {
             } 
             
             // otherwise we must have the new 2020 reaction code, which
-			// is simpler to deal with (though more complicated to 
-			// programatically navigate/trigger)
+            // is simpler to deal with (though more complicated to 
+            // programatically navigate/trigger)
             else {
                 $(this).find('div div:eq(1) span span').addClass("like-text");
                 $(this).find('.like-text').text(lang["picking"]);
@@ -316,12 +319,12 @@ function goRando(e) {
        {
         oldReactionStyle = true;
 
-		// for old reactions code, pad the roll +1 so that we add one for 
-		// every crossover from end to start (angry to like). this is bc
-		// tabs at that point on the old dialog require 2 tabs to get 
-		// back to like. then add 2 more as its the average number of 
-		// reactions missed due to the laggy-loading dialog 
-		roll += Math.floor(roll/NUM_REACTIONS) + 2;
+        // for old reactions code, pad the roll +1 so that we add one for 
+        // every crossover from end to start (angry to like). this is bc
+        // tabs at that point on the old dialog require 2 tabs to get 
+        // back to like. then add 2 more as its the average number of 
+        // reactions missed due to the laggy-loading dialog 
+        roll += Math.floor(roll/NUM_REACTIONS) + 2;
 
         // clear out reactionButtons so we can refill the array
         reactionButtons = [];
@@ -378,18 +381,18 @@ function goRando(e) {
             getOldReactionButtons(); 
 
             // try again if needed, though am no longer seeing need for this
-	        if(!reactionButtons.length > 0) {
-	            setTimeout(function() { 
+            if(!reactionButtons.length > 0) {
+                setTimeout(function() { 
                     getOldReactionButtons(); 
                 }, 250);
-
             }
+
         }, 100);
     }
 
 	
     // reactionButtons are tracked and ready. run through them, select 
-	// the pick, and then reset everything back as it was before 
+    // the pick, and then reset everything back as it was before 
     for(let i = 0; i < roll; i++) {
 
         // if we've finally landed, reset "Picking..." and click/enter 
